@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>审核</title>
+        <script src="../scripts/boot.js" type="text/javascript"></script>
+        <style>
+            table
+            {
+                left: 0;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                margin: auto;
+            }
+        </style> 
+    </head>
+    <body>
+        <form id="check" action="/leave/check" method="post">
+            <table>
+                <tr>
+                    <td>
+                        <input class="mini-radiobuttonlist" repeatLayout="table"
+                         textField="text" valueField="text" name="state" url="/state" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input labelField="true" label="意见"
+                               labelStyle="text-align:right; line-height: 50px;"
+                               inputStyle="text-align: left" type="text" name="opinion"
+                               class="mini-textarea" style="width:100%" required="true"
+                               />
+                    </td>
+                </tr>
+            </table>
+            <div style="text-align: center; padding: 10px;">             
+                    <a class="mini-button" onclick="onOk"
+                       style="width: 60px; margin-right: 30px;">提交</a>
+                    <a class="mini-button" onclick="onCancel" style="width:60px;">取消</a>
+            </div>
+        </form>
+        <script type="text/javascript">
+            mini.parse();
+            var form = new mini.Form("check");
+            var uuid;
+            
+            function setUuid(uuid) {
+            	uuid = mini.clone(uuid);
+            	this.uuid = uuid;
+            }
+            
+            function saveData() {
+                var targetUrl = $("#check").attr("action");
+                var data = $.param({"uuid": uuid}) + "&" + $("#check").serialize();
+                $.ajax({    
+                    type: "post",
+                    url: targetUrl,
+                    cache: false,
+                    data: data,
+                    dataType: "json",
+                    success: function(ret) {
+                        if (ret.state == "ok") {
+                            console.log(ret);
+                            closeWindow("save")
+                        }
+                    },
+                    error: function() {
+                        alert("没有权限");
+                    }
+                })                 
+            }
+            
+            function closeWindow(action) {
+                if (action == "close" && form.isChanged()) {
+                    if (confirm("数据被修改了，是否先保存？")) {
+                        return false;
+                    }
+                }
+                if (window.CloseOwnerWindow) {
+                    return window.CloseOwnerWindow(action);
+                }
+                else {
+                    window.close();            
+                }
+            }
+            
+            function onOk(e) {
+                saveData();
+            }
+            
+            function onCancel(e) {
+                closeWindow("cancel");
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>主页</title>
+        <script src="../scripts/boot.js" type="text/javascript"></script>
+        <style>
+            html,body
+            {
+                width:100%;
+                height:100%;
+                border:0;
+                margin:0;
+                padding:0;
+                overflow:visible;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="mini-toolbar" style="border-bottom: 0; padding: 0px;">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width:100%;">
+                        <div id="hello">请登陆</div>
+                        <a class="mini-button" id="login" onclick="login()">登陆</a>
+                        <a class="mini-button" id="add" visible="fales" onclick="add()">申请</a>
+                        <a class="mini-button" id="check" visible="fales" onclick="check()">审核</a>
+                        <a class="mini-button" id="out" visible="fales" onclick="out()">退出</a>
+                    </td>
+                    <td style="white-space:nowrap;">
+                        <input id="key" visible="fales" class="mini-textbox" emptyText="请输入姓名"
+                               style="width:150px;" onenter="onKeyEnter"
+                               />   
+                        <a class="mini-button" id="search" visible="fales" onclick="search()">查询</a>
+                    </td>
+                </tr>
+            </table>           
+        </div>
+        <div class="mini-fit">
+        <div id="datagrid" class="mini-datagrid" allowResize="true" url="/leave/form"
+             idField="id" multiSelect="true"
+             style="width:100%;height:100%;"
+             >
+            <div property="columns">
+                <!--<div type="indexcolumn"></div>        -->
+                <div type="checkcolumn" ></div>
+                <div field="uuid" name="uuid" width="120" headerAlign="center" align="center"
+                     allowSort="true" visible="false">uuid</div>
+                <div field="date" width="120" headerAlign="center" align="center"
+                     dateFormat="yyyy-MM-dd" allowSort="true">请假开始日期</div>
+                <div field="date1" width="120" headerAlign="center" align="center"
+                     dateFormat="yyyy-MM-dd" allowSort="true">请假截止日期</div>
+                <div field="name" width="120" headerAlign="center" align="center"
+                     allowSort="true">申请人姓名</div>
+                <div header="状态" headerAlign="center">
+                <div property="columns">
+                    <div field="state" width="120" headerAlign="center" align="center"
+                         allowSort="true">申请状态</div>
+                    <div field="opinion" width="200" headerAlign="center" align="center"
+                         allowSort="true">意见</div>
+                </div>
+                </div>
+                <div header="工作信息" headerAlign="center">
+                <div property="columns">
+                    <div field="dept" width="120" headerAlign="center" align="center"
+                         allowSort="true">所属部门</div>
+                    <div field="post" width="100" headerAlign="center" align="center"
+                         allowSort="true">职位</div>
+                </div>
+                </div>
+                <div header="请假信息" headerAlign="center">
+                <div property="columns">
+                <div field="reason" width="200" headerAlign="center" align="center"
+                     allowSort="true">请假原因</div>
+                    <div field="type" width="120" headerAlign="center" align="center"
+                         allowSort="true">请假类型</div>
+                    <div field="day" width="100" headerAlign="center" align="center"
+                         allowSort="true">天数</div>
+                    <div field="hour" width="100" headerAlign="center" align="center"
+                         allowSort="true">小时数</div>
+                </div>
+                </div>                     
+            </div>
+        </div>
+        </div>
+        <script type="text/javascript">
+        
+            mini.parse();
+            var grid = mini.get("datagrid");
+            
+            function showButton(perid) {
+            	var id = perid.split("");
+            	for (var i = 0; i < id.length; i++) {
+            		   if (id[i] == "1") {
+            			   $("#add").show();
+            		   }
+            		   if (id[i] == "2") {
+                           $("#add").show();
+                           $("#check").show();
+                           $("#key").show();
+                           $("#search").show();
+                       }
+            		   if (id[i] == "3") {
+                           $("#add").show();
+                           $("#key").show();
+                           $("#search").show();
+                       }
+            	}
+            }
+            
+            function getCookie(name) {
+            	var arr;
+            	var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            	if (arr = document.cookie.match(reg)) {
+            	    return arr[2];
+            	}
+            	else {
+            	    return null;
+            	}
+            }
+            
+            function delCookie(name) {
+                var exp = new Date();
+                exp.setTime(exp.getTime() - 1);
+                var cval = getCookie(name);
+                if (cval != null) {
+                    document.cookie= name + "=" + cval + ";expires=" + exp.toGMTString();
+                }
+            }
+            
+            $(function () {
+            	var username = getCookie("username");
+            	if (username != null) {
+                	var perid = getCookie("perid");
+                    showButton(perid);
+                    grid.load();
+                    $("#login").hide();
+                    $("#out").show();
+                    $("#hello").html(username);
+            	}
+            })
+            
+            function login() {
+            	mini.open({
+            		targetWindow: window,
+                    url: "login",
+                    title: "登陆",
+                    width: 400,
+                    height: 300,
+                    ondestroy: function (action) {
+                        if (action == "save") {
+                            var perid = getCookie("perid");
+                            showButton(perid);
+                            grid.load();
+                            $("#login").hide();
+                            $("#out").show();
+                            var username = getCookie("username");
+                            $("#hello").html(username);
+                        }  
+                    }
+            	});
+            }
+            
+            function add() {
+                mini.open({
+                    targetWindow: window,
+                    url: "leave",
+                    title: "新增请假表",
+                    width: 800,
+                    height: 400,
+                    onload: function () {
+                    	var username = getCookie("username");
+                    	if (username != null) {
+                            var iframe = this.getIFrameEl();
+                            iframe.contentWindow.setData();
+                    	}
+                    },
+                    ondestroy: function (action) {
+                        grid.reload();
+                    }
+                });
+            }
+            
+            function check() {
+            	var row = grid.getSelected();
+            	if (row) {
+                	mini.open({
+                        targetWindow: window,
+                        url: "check",
+                        title: "审核",
+                        width: 400,
+                        height: 300,
+                        onload: function () {
+                            var iframe = this.getIFrameEl();
+                            iframe.contentWindow.setUuid(row.uuid);
+                        },
+                        ondestroy: function (action) {
+                            grid.reload();
+                        }
+                    });
+            	} else {
+            		alert("请选中一条记录");
+            	}
+            }
+            
+            function out() {
+            	$.ajax({
+                    method: "post",
+                    url: "/leave/out",
+                    success: function(ret) {
+                        if (ret.state == "ok") {
+                        	window.location.href="/index";
+                            alert("退出成功");
+                        } 
+                    },
+                    error: function() {
+                        alert("退出失败");
+                    }
+                })
+            }
+            
+            function search() {
+                var key = mini.get("key").getValue();
+                grid.load({ findName: key });
+            }
+            
+            function onKeyEnter(e) {
+                search();
+            }
+        </script>
+    </body>
+</html>

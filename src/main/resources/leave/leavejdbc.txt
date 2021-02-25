@@ -1,0 +1,34 @@
+#sql("login")
+    select * from leave_user
+    where
+    #if(username)
+        username = #para(username)
+    #end
+#end
+
+#sql("perid")
+    select per_id
+    from leave_role_user_relation, leave_permission_role_relation
+    where leave_role_user_relation.role_id = leave_permission_role_relation.role_id and user_id = #para(user_id)
+#end
+
+#sql("update")
+    update leave_form
+    set state = #para(state), opinion = #para(opinion)
+    where uuid = #para(uuid)
+#end
+
+#sql("find")
+    select *
+    from leave_form
+    where name = #para(name)
+#end
+
+#sql("form")
+    select *
+    from leave_form
+    where 1 = 1
+    #if(findName)
+        and name like concat('%', #para(findName), '%')
+    #end
+#end
