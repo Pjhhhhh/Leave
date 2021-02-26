@@ -1,4 +1,0 @@
-#主要配置
-jdbcUrl=jdbc:postgresql://localhost/leave
-user=postgres
-password=pjh

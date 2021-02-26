@@ -23,15 +23,15 @@
                     <td>
                         <input labelField="true" label="请假开始日期" format="yyyy-MM-dd"
                                labelStyle="text-align: right; line-height: 25px;"
-                               inputStyle="text-align: right" type="text" name="date"
-                               class="mini-datepicker" required="true" id="date" onblur="cal"
+                               inputStyle="text-align: right" type="text" name="startDate"
+                               class="mini-datepicker" required="true" id="startDate" onblur="cal"
                                />
                     </td>
                     <td>
                         <input labelField="true" label="请假截止日期"
                                labelStyle="text-align: right; line-height: 25px;"
-                               inputStyle="text-align: right" type="text" name="date1"
-                               class="mini-datepicker" required="true" id="date1" onblur="cal()"
+                               inputStyle="text-align: right" type="text" name="endDate"
+                               class="mini-datepicker" required="true" id="endDate" onblur="cal()"
                                />
                     </td>
                 </tr>
@@ -125,8 +125,8 @@
             }
             
             function cal() {
-            	var startDate = mini.getByName("date").getFormValue();
-                var endDate = mini.get("date1").getFormValue();
+            	var startDate = mini.getByName("startDate").getFormValue();
+                var endDate = mini.get("endDate").getFormValue();
                 var date = checkDate(startDate, endDate);
                 if (date > 0) {
                 	mini.getByName("day").setValue(date);
@@ -165,7 +165,7 @@
                         }
                     },
                     error: function() {
-                        alert("没有权限");
+                        alert("错误");
                     }
                 })                 
             }

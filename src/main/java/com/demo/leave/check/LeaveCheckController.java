@@ -9,6 +9,11 @@ import com.jfinal.plugin.activerecord.Db;
 
 import cn.hutool.core.util.StrUtil;
 
+/**
+ * 审核请假
+ * @author Pjh
+ * @date 2021年2月19日
+ */
 @Path("/leave/check")
 @Before(CheckValidator.class)
 public class LeaveCheckController extends Controller {
@@ -17,6 +22,7 @@ public class LeaveCheckController extends Controller {
         String uuid = getPara("uuid");
         String state = getPara("state");
         String opinion = getPara("opinion");
+        // 默认状态
         String check = "未审核";
         if (StrUtil.isBlank(state)) {
             state = check;

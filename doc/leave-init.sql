@@ -1,4 +1,9 @@
+DROP TABLE IF EXISTS leave_form;
+DROP TABLE IF EXISTS leave_permission_role_relation;
+DROP TABLE IF EXISTS leave_role_user_relation;
+DROP TABLE IF EXISTS leave_permission;
 DROP TABLE IF EXISTS leave_user;
+DROP TABLE IF EXISTS leave_role;
 
 CREATE TABLE leave_user
 (
@@ -16,7 +21,6 @@ VALUES
 ('2', '考勤员1', '2', '2', '2', '2'),
 ('3', '职员1', '3', '3', '3', '3');
 
-DROP TABLE IF EXISTS leave_role;
 
 CREATE TABLE leave_role
 (
@@ -31,7 +35,7 @@ VALUES
 ('2', '考勤员', '1'),
 ('3', '职员', '1');
 
-DROP TABLE IF EXISTS leave_permission;
+
 
 CREATE TABLE leave_permission
 (
@@ -45,7 +49,6 @@ VALUES
 ('2', '审核'),
 ('3', '查询');
 
-DROP TABLE IF EXISTS leave_role_user_relation;
 
 CREATE TABLE leave_role_user_relation
 (
@@ -64,7 +67,6 @@ VALUES
 ('2', '2', '2'),
 ('3', '3', '3');
 
-DROP TABLE IF EXISTS leave_permission_role_relation;
 
 CREATE TABLE leave_permission_role_relation
 (
@@ -85,13 +87,12 @@ VALUES
 ('4', '3', '2'),
 ('5', '1', '3');
 
-DROP TABLE IF EXISTS leave_form;
 
 CREATE TABLE leave_form
 (
     uuid varchar(130) PRIMARY KEY,
-    date varchar(10) NOT NULL,
-    date1 varchar(10) NOT NULL,
+    "startDate" varchar(10) NOT NULL,
+    "endDate" varchar(10) NOT NULL,
     name varchar(10) NOT NULL,
     dept varchar(20) NOT NULL,
     post varchar(20) NOT NULL,

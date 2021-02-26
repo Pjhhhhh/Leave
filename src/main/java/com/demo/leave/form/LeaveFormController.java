@@ -13,11 +13,18 @@ import com.jfinal.plugin.activerecord.Record;
 
 import cn.hutool.core.util.StrUtil;
 
+/**
+ * 
+ * 显示请假记录
+ * @author Pjh
+ * @date 2021年2月19日
+ */
 @Path("/leave/form")
 @Before(FormValidator.class)
 public class LeaveFormController extends Controller {
     
     public void index() {
+        // 查询申请人姓名
         String findName = getPara("findName");
         Kv cond1 = Kv.by("findName", findName);
         List<Record> userList;
@@ -29,8 +36,8 @@ public class LeaveFormController extends Controller {
         List<Kv> list = new ArrayList<>();
         for (int i = 0; i < userList.size(); i++) {
             String uuid = userList.get(i).getStr("uuid");
-            String date = userList.get(i).getStr("date");
-            String date1 = userList.get(i).getStr("date1");
+            String startDate = userList.get(i).getStr("startDate");
+            String endDate = userList.get(i).getStr("endDate");
             String name = userList.get(i).getStr("name");
             String dept = userList.get(i).getStr("dept");
             String post = userList.get(i).getStr("post");
@@ -40,12 +47,11 @@ public class LeaveFormController extends Controller {
             String hour = userList.get(i).getStr("hour");
             String state = userList.get(i).getStr("state");
             String opinion = userList.get(i).getStr("opinion");
-            Kv data = Kv.by("uuid", uuid).set("date", date).set("date1", date1).set("name", name).set("dept", dept)
+            Kv data = Kv.by("uuid", uuid).set("startDate", startDate).set("endDate", endDate).set("name", name).set("dept", dept)
                     .set("post", post).set("reason", reason).set("type", type)
                     .set("day", day).set("hour", hour).set("state", state).set("opinion", opinion);
             list.add(data);
         }
         renderJson(Ret.ok("data", list));
     }
-    
 }

@@ -10,14 +10,21 @@ import com.jfinal.plugin.activerecord.Record;
 
 import cn.hutool.core.util.IdUtil;
 
+/**
+ * 
+ * 获取请假信息并写入数据库
+ * @author Pjh
+ * @date 2021年2月26日
+ */
 @Path("/leave/jdbc")
-@Before(JdbcValidator.class)
+@Before(LeaveValidator.class)
 public class LeaveJdbcController extends Controller {
     
     public void index() {
+        // 随机获得uuid
         String uuid = IdUtil.simpleUUID();
-        String date = getPara("date");
-        String date1 = getPara("date1");
+        String startDate = getPara("startDate");
+        String endDate = getPara("endDate");
         String name = getPara("name");
         String dept = getPara("dept");
         String post = getPara("post");
@@ -26,14 +33,13 @@ public class LeaveJdbcController extends Controller {
         String day = getPara("day");
         String hour = getPara("hour");
         String state = "未审核";
-        Record user = new Record().set("uuid", uuid).set("date", date).set("date1", date1).set("name", name).set("dept", dept)
+        Record user = new Record().set("uuid", uuid).set("startDate", startDate).set("endDate", endDate).set("name", name).set("dept", dept)
                 .set("post", post).set("reason", reason).set("type", type).set("day", day)
                 .set("hour", hour).set("state", state).set("opinion", state);
         Db.save("leave_form", "uuid", user);
-        Kv data = Kv.by("uuid", uuid).set("date", date).set("date1", date1).set("name", name).set("dept", dept).set("post", post)
+        Kv data = Kv.by("uuid", uuid).set("startDate", startDate).set("endDate", endDate).set("name", name).set("dept", dept).set("post", post)
                 .set("reason", reason).set("type", type).set("day", day).set("hour", hour)
                 .set("state", state).set("opinion", state);
         renderJson(Ret.ok("data", data));
     }
-    
 }

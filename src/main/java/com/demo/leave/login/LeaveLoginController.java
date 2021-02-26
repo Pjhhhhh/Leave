@@ -10,6 +10,12 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.render.JsonRender;
 
+/**
+ * 
+ * 用户登录验证
+ * @author Pjh
+ * @date 2021年2月18日
+ */
 @Path("/leave/login")
 public class LeaveLoginController extends Controller {
     
@@ -19,9 +25,11 @@ public class LeaveLoginController extends Controller {
         Kv cond = Kv.by("username", username);
         Record a = Db.template("leave.login", cond).findFirst();
         String pwd = a.getStr("password");
+        // 验证密码是否正确
         if (password.equals(pwd)) {
             String user_id = a.getStr("user_id");
             Kv cond1 = Kv.by("user_id", user_id);
+            // 获取用户权限
             List<Record> perid = Db.template("leave.perid", cond1).find();
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < perid.size(); i++) {
@@ -31,6 +39,7 @@ public class LeaveLoginController extends Controller {
             setCookie("perid", sb.toString(), -1);
             setCookie("username", username, -1);
             setSessionAttr("perid", sb.toString());
+            // 记录请求ip地址
             setSessionAttr("ip", getRequest().getRemoteAddr());
             setCookie("sessionId", getSession().getId(), -1, true);
             renderJson(Ret.ok("username", username));
@@ -38,5 +47,4 @@ public class LeaveLoginController extends Controller {
             renderError(403, new JsonRender(Ret.fail()));
         }
     }
-    
 }
