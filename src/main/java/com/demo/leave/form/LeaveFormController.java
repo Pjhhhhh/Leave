@@ -47,9 +47,9 @@ public class LeaveFormController extends Controller {
             String hour = userList.get(i).getStr("hour");
             String state = userList.get(i).getStr("state");
             String opinion = userList.get(i).getStr("opinion");
-            Kv data = Kv.by("uuid", uuid).set("startDate", startDate).set("endDate", endDate).set("name", name).set("dept", dept)
-                    .set("post", post).set("reason", reason).set("type", type)
-                    .set("day", day).set("hour", hour).set("state", state).set("opinion", opinion);
+            Kv data = Kv.by("uuid", uuid).set("startDate", startDate).set("endDate", endDate)
+                .set("name", name).set("dept", dept).set("post", post).set("reason", reason).set("type", type)
+                .set("day", day).set("hour", hour).set("state", state).set("opinion", opinion);
             list.add(data);
         }
         renderJson(Ret.ok("data", list));

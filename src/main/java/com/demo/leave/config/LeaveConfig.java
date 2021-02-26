@@ -63,15 +63,9 @@ public class LeaveConfig extends JFinalConfig {
         arp.setDialect(new PostgreSqlDialect());
     }
     
-    public void configEngine(Engine me) {
-        
-    }
+    public void configEngine(Engine me) {}
     
-    public void configInterceptor(Interceptors me) {
-        
-    }
+    public void configInterceptor(Interceptors me) {}
     
-    public void configHandler(Handlers me) {
-        
-    }
+    public void configHandler(Handlers me) {}
 }

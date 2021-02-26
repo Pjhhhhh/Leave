@@ -33,13 +33,15 @@ public class LeaveJdbcController extends Controller {
         String day = getPara("day");
         String hour = getPara("hour");
         String state = "未审核";
-        Record user = new Record().set("uuid", uuid).set("startDate", startDate).set("endDate", endDate).set("name", name).set("dept", dept)
-                .set("post", post).set("reason", reason).set("type", type).set("day", day)
-                .set("hour", hour).set("state", state).set("opinion", state);
+        Record user = new Record().set("uuid", uuid).set("startDate", startDate)
+            .set("endDate", endDate).set("name", name).set("dept", dept)
+            .set("post", post).set("reason", reason).set("type", type).set("day", day)
+            .set("hour", hour).set("state", state).set("opinion", state);
         Db.save("leave_form", "uuid", user);
-        Kv data = Kv.by("uuid", uuid).set("startDate", startDate).set("endDate", endDate).set("name", name).set("dept", dept).set("post", post)
-                .set("reason", reason).set("type", type).set("day", day).set("hour", hour)
-                .set("state", state).set("opinion", state);
+        Kv data = Kv.by("uuid", uuid).set("startDate", startDate).set("endDate", endDate)
+            .set("name", name).set("dept", dept).set("post", post).set("reason", reason)
+            .set("type", type).set("day", day).set("hour", hour).set("state", state)
+            .set("opinion", state);
         renderJson(Ret.ok("data", data));
     }
 }
