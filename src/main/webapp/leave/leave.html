@@ -183,6 +183,13 @@
                 });
             }
             
+            $(function () {
+                var username = getCookie("username");
+                if (username != null) {
+                	setData();
+                }
+            })
+            
             function closeWindow(action) {
             	if (action == "close" && form.isChanged()) {
                     if (confirm("数据被修改了，是否先保存？")) {

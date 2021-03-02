@@ -1,8 +1,8 @@
 #sql("login")
     select * from leave_user
-    where
+    where 1 = 1
     #if(username)
-        username = #para(username)
+        and username = #para(username)
     #end
 #end
 
@@ -31,4 +31,21 @@
     #if(findName)
         and name like concat('%', #para(findName), '%')
     #end
+#end
+
+#sql("user")
+    select *
+    from leave_user
+    where dept = #para(findDept)
+#end
+
+#sql("add")
+    insert into leave_user
+    values(#para(user_id), #para(user_name), #para(username), #para(password), #para(dept), #para(post))
+#end
+
+#sql("delete")
+    delete
+    from leave_user
+    where user_id = #para(user_id)
 #end

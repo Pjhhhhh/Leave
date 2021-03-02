@@ -16,6 +16,9 @@
         </style> 
     </head>
     <body>
+    <div id="loginWindow" class="mini-window" title="用户登录" style="width:350px;height:165px;" 
+            showModal="true" showCloseButton="false"
+        >
         <form id="login" action="/leave/login" method="post">
             <table>
                 <tr>
@@ -43,9 +46,20 @@
                     <a class="mini-button" onclick="onCancel" style="width:60px;">取消</a>
             </div>
         </form>
+        </div>
         <script type="text/javascript">
+        
             mini.parse();
+            var loginWindow = mini.get("loginWindow");
+            loginWindow.show();
             var form = new mini.Form("login");
+            
+            $(function () {
+                var username = getCookie("username");
+                if (username != null) {
+                	window.location.href="/index";
+                }
+            })
             
             function saveData() {
             	var username = mini.get("username").getValue();
@@ -72,7 +86,7 @@
                     dataType: "json",
                     success: function(ret) {
                         if (ret.state == "ok") {
-                            closeWindow("save");
+                        	window.location.href="/index";
                         }
                     },
                     error: function() {

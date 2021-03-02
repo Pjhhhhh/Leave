@@ -1,0 +1,7 @@
+[
+    {"name":"领导", "id":"1"},
+
+    {"name":"员工", "id":"yg", expanded: true},
+    {"name":"考勤员", "id":"2", "pid": "yg"},   
+    {"name":"职员", "id":"3", "pid": "yg"}
+]

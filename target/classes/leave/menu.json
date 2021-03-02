@@ -1,0 +1,22 @@
+
+[
+    {
+        "id": "sq",
+        "iconCls": "fa fa-plus-circle",
+        "text": "申请",
+        "url": "/leave"
+    },
+    {
+        "id": "sh",
+        "iconCls": "fa fa-check-circle",
+        "text": "审核",
+        "url": "/check"
+    },
+    {
+        "id": "yhgl",
+        "iconCls": "fa fa-user",
+        "text": "用户管理",
+        "url": "/user"
+    }
+]
+            

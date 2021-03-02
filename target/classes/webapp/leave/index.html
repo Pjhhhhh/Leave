@@ -1,23 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
+
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>主页</title>
-        <script src="../scripts/boot.js" type="text/javascript"></script>
-        <style>
-            html,body
-            {
-                width:100%;
-                height:100%;
-                border:0;
-                margin:0;
-                padding:0;
-                overflow:visible;
-            }
-        </style>
+    <head>    
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>请假系统</title> 
+        <script src="scripts/boot.js"></script>
+        <link href="res/menu/menu.css" rel="stylesheet" type="text/css" />
+        <script src="res/menu/menu.js" type="text/javascript"></script>
+        <link href="res/tabs.css" rel="stylesheet" type="text/css" />
+        <link href="res/frame.css" rel="stylesheet" type="text/css" />
+        <link href="res/index.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
-        <div class="mini-toolbar" style="border-bottom: 0; padding: 0px;">
+        <div class="navbar">
+            <div class="navbar-header">
+                <div class="navbar-brand">MiniUI</div>
+            </div>
+            <div class="nav navbar-nav top-menu">
+                <div id="mainMenu"></div>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><input class="search-input" type="text" placeholder="搜索" /></li>
+                <li><a href="#"><i class="fa fa-user"></i></a></li>
+                <li><a href="#"><i class="fa fa-comments"></i></a></li>
+                <li><a href="#"><i class="fa fa-tasks"></i></a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle userinfo">
+                        <img class="user-img" src="res/images/user.png" />个人资料<i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="#"><i class="fa fa-user "></i>个人设置</a></li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#"> <i class="fa fa-question-circle-o"></i>帮助文档</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-arrows-alt"></i>全屏</a></li>
+                        <li><a href="#"><i class="fa fa-lock "></i>锁住系统</a></li>
+                        <li><a href="#"><i class="fa fa-key "></i>注销</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="container">
+            <div id="mainTabs" class="mini-tabs" activeIndex="0" style="height:100%;" plain="false"
+                 buttons="#tabsButtons" arrowPosition="side">
+                <div name="index" iconCls="fa fa-home"  title="控制台">
+                    <div class="mini-toolbar" style="border-bottom: 0; padding: 0px;">
             <table style="width:100%;">
                 <tr>
                     <td style="width:100%;">
@@ -83,150 +113,111 @@
             </div>
         </div>
         </div>
-        <script type="text/javascript">
-        
-            mini.parse();
-            var grid = mini.get("datagrid");
-            
-            function showButton(perid) {
-            	var id = perid.split("");
-            	for (var i = 0; i < id.length; i++) {
-            		   if (id[i] == "1") {
-            			   $("#add").show();
-            		   }
-            		   if (id[i] == "2") {
-                           $("#add").show();
-                           $("#check").show();
-                           $("#key").show();
-                           $("#search").show();
-                       }
-            		   if (id[i] == "3") {
-                           $("#add").show();
-                           $("#key").show();
-                           $("#search").show();
-                       }
-            	}
-            }
-            
-            function getCookie(name) {
-            	var arr;
-            	var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            	if (arr = document.cookie.match(reg)) {
-            	    return arr[2];
-            	}
-            	else {
-            	    return null;
-            	}
-            }
-            
-            function delCookie(name) {
-                var exp = new Date();
-                exp.setTime(exp.getTime() - 1);
-                var cval = getCookie(name);
-                if (cval != null) {
-                    document.cookie= name + "=" + cval + ";expires=" + exp.toGMTString();
-                }
-            }
-            
-            $(function () {
-            	var username = getCookie("username");
-            	if (username != null) {
-                	var perid = getCookie("perid");
-                    showButton(perid);
-                    grid.load();
-                    $("#login").hide();
-                    $("#out").show();
-                    $("#hello").html(username);
-            	}
-            })
-            
-            function login() {
-            	mini.open({
-            		targetWindow: window,
-                    url: "login",
-                    title: "登陆",
-                    width: 400,
-                    height: 300,
-                    ondestroy: function (action) {
-                        if (action == "save") {
-                            var perid = getCookie("perid");
-                            showButton(perid);
-                            grid.load();
-                            $("#login").hide();
-                            $("#out").show();
-                            var username = getCookie("username");
-                            $("#hello").html(username);
-                        }  
-                    }
-            	});
-            }
-            
-            function add() {
-                mini.open({
-                    targetWindow: window,
-                    url: "leave",
-                    title: "新增请假表",
-                    width: 800,
-                    height: 400,
-                    onload: function () {
-                    	var username = getCookie("username");
-                    	if (username != null) {
-                            var iframe = this.getIFrameEl();
-                            iframe.contentWindow.setData();
-                    	}
-                    },
-                    ondestroy: function (action) {
-                        grid.reload();
-                    }
-                });
-            }
-            
-            function check() {
-            	var row = grid.getSelected();
-            	if (row) {
-                	mini.open({
-                        targetWindow: window,
-                        url: "check",
-                        title: "审核",
-                        width: 400,
-                        height: 300,
-                        onload: function () {
-                            var iframe = this.getIFrameEl();
-                            iframe.contentWindow.setUuid(row.uuid);
-                        },
-                        ondestroy: function (action) {
-                            grid.reload();
-                        }
-                    });
-            	} else {
-            		alert("请选中一条记录");
-            	}
-            }
-            
-            function out() {
-            	$.ajax({
-                    method: "post",
-                    url: "/leave/out",
-                    success: function(ret) {
-                        if (ret.state == "ok") {
-                        	window.location.href="/index";
-                            alert("退出成功");
-                        } 
-                    },
-                    error: function() {
-                        alert("退出失败");
-                    }
-                })
-            }
-            
-            function search() {
-                var key = mini.get("key").getValue();
-                grid.load({ findName: key });
-            }
-            
-            function onKeyEnter(e) {
-                search();
-            }
-        </script>
+                </div>
+            </div>
+            <div id="tabsButtons">
+                <a class="tabsBtn"><i class="fa fa-home"></i></a>
+                <a class="tabsBtn"><i class="fa fa-refresh"></i></a>
+                <a class="tabsBtn"><i class="fa fa-remove"></i></a>
+                <a class="tabsBtn"><i class="fa fa-arrows-alt"></i></a>
+            </div>
+        </div>
+
+
     </body>
 </html>
+<script>
+
+    mini.parse();
+    var grid = mini.get("datagrid");
+
+    function activeTab(item) {
+        var tabs = mini.get("mainTabs");
+        var tab = tabs.getTab(item.id);
+        if (!tab) {
+            tab = {name: item.id, title: item.text, url: item.url, iconCls: item.iconCls, showCloseButton: true};
+            tab = tabs.addTab(tab);
+        }
+        tabs.activeTab(tab);
+        tabs.on("activechanged", function(e){
+            grid.reload();
+       })
+    }
+    
+    function showButton(perid) {
+        var id = perid.split("");
+        for (var i = 0; i < id.length; i++) {
+               if (id[i] == "1") {
+                   $("#add").show();
+               }
+               if (id[i] == "2") {
+                   $("#add").show();
+                   $("#check").show();
+                   $("#key").show();
+                   $("#search").show();
+               }
+               if (id[i] == "3") {
+                   $("#add").show();
+                   $("#key").show();
+                   $("#search").show();
+               }
+        }
+    }
+    
+    function out() {
+        $.ajax({
+            method: "post",
+            url: "/leave/out",
+            success: function(ret) {
+                if (ret.state == "ok") {
+                    window.location.href="/login";
+                    alert("退出成功");
+                } 
+            },
+            error: function() {
+                alert("退出失败");
+            }
+        })
+    }
+
+    $(function () {
+
+        //menu
+        var menu = new Menu("#mainMenu", {
+            itemclick: function (item) {
+                if (!item.children) {
+                    activeTab(item);
+                }
+            }
+        });
+        
+        var username = getCookie("username");
+        if (username != null) {
+            var perid = getCookie("perid");
+            showButton(perid);
+            grid.load();
+            $("#login").hide();
+            $("#out").show();
+            $("#hello").html(username);
+        }
+
+        $.ajax({
+            url: "/menu",
+            success: function (text) {
+                var data = mini.decode(text);
+                menu.loadData(data);
+            }
+        })
+
+        //dropdown
+        $(".dropdown-toggle").click(function (event) {
+            $(this).parent().addClass("open");
+            return false;
+        });
+
+        $(document).click(function (event) {
+            $(".dropdown").removeClass("open");
+        });
+    });
+
+</script>
