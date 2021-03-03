@@ -3,6 +3,7 @@ package com.demo.leave.user;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.core.Path;
 import com.jfinal.kit.Kv;
@@ -20,6 +21,7 @@ import cn.hutool.core.util.StrUtil;
  * @date 2021年3月2日
  */
 @Path("/user/form")
+@Before(UserValidator.class)
 public class UserFormController extends Controller {
 
     public void index() {
@@ -43,6 +45,5 @@ public class UserFormController extends Controller {
         } else {
             renderError(403, new JsonRender(Ret.fail()));
         }
-        
     }
 }

@@ -49,3 +49,25 @@
     from leave_user
     where user_id = #para(user_id)
 #end
+
+#sql("update1")
+    update leave_user
+    set user_name = #para(user_name), username = #para(username), password = #para(password), post = #para(post)
+    where user_id = #para(user_id)
+#end
+
+#sql("role")
+    select role_id
+    from leave_role
+#end
+
+#sql("username")
+    select username
+    from leave_user
+#end
+
+#sql("userid")
+    select user_id
+    from leave_user
+    where username = #para(username)
+#end

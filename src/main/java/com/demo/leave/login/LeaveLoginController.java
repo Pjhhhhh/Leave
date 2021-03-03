@@ -38,13 +38,14 @@ public class LeaveLoginController extends Controller {
             }
             setCookie("perid", sb.toString(), -1);
             setCookie("username", username, -1);
+            setSessionAttr("user_id", user_id);
             setSessionAttr("perid", sb.toString());
             // 记录请求ip地址
             setSessionAttr("ip", getRequest().getRemoteAddr());
             setCookie("sessionId", getSession().getId(), -1, true);
             renderJson(Ret.ok("username", username));
         } else {
-            renderError(403, new JsonRender(Ret.fail()));
+            renderError(403, new JsonRender(Ret.fail("message", "账号或密码错误").toJson()));
         }
     }
 }

@@ -1,6 +1,4 @@
-package com.demo.leave.check;
-
-import java.util.Arrays;
+package com.demo.leave.user;
 
 import com.jfinal.core.Controller;
 import com.jfinal.kit.Ret;
@@ -11,27 +9,21 @@ import cn.hutool.core.util.StrUtil;
 
 /**
  * 
- * 验证是否有审核权限
+ * 验证能否对用户进行管理
  * @author Pjh
- * @date 2021年2月22日
+ * @date 2021年3月3日
  */
-public class CheckValidator extends Validator {
+public class UserValidator extends Validator {
 
     @Override
     protected void validate(Controller c) {
-        // 获取请求ip地址
         String localIp = c.getRequest().getRemoteAddr();
         String ip = c.getSessionAttr("ip");
         if (localIp.equals(ip)) {
-            String id = c.getSessionAttr(("perid"));
-            if (StrUtil.isBlank(id)) {
-                addError(id, id);
-            } else {
-                String[] arr = id.split("");
-                // 验证是否有审核权限id
-                if (!Arrays.asList(arr).contains("2")) {
-                    addError(id, id);
-                }
+            // 验证是否有用户登录
+            String user_id = c.getSessionAttr(("user_id"));
+            if (StrUtil.isBlank(user_id)) {
+                addError(user_id, user_id);
             }
         } else {
             addError(ip, ip);

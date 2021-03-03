@@ -15,6 +15,7 @@ import cn.hutool.core.util.StrUtil;
  */
 public class FormValidator extends Validator {
 
+    @Override
     protected void validate(Controller c) {
         // 获取请求ip地址
         String localIp = c.getRequest().getRemoteAddr();
@@ -30,7 +31,8 @@ public class FormValidator extends Validator {
         }
     }
 
+    @Override
     protected void handleError(Controller c) {
-        c.renderError(403, new JsonRender(Ret.fail()));
+        c.renderError(403, new JsonRender(Ret.fail("message", "没有权限").toJson()));
     }
 }
