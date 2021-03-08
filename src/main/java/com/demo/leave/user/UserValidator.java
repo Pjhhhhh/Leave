@@ -21,7 +21,7 @@ public class UserValidator extends Validator {
         String ip = c.getSessionAttr("ip");
         if (localIp.equals(ip)) {
             // 验证是否有用户登录
-            String user_id = c.getSessionAttr(("user_id"));
+            String user_id = c.getSessionAttr("user_id");
             if (StrUtil.isBlank(user_id)) {
                 addError(user_id, user_id);
             }

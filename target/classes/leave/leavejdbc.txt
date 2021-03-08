@@ -52,7 +52,7 @@
 
 #sql("update1")
     update leave_user
-    set user_name = #para(user_name), username = #para(username), password = #para(password), post = #para(post)
+    set user_name = #para(user_name), username = #para(username), name = #para(name), password = #para(password), "securePassword" = #para(securePassword), post = #para(post)
     where user_id = #para(user_id)
 #end
 
@@ -70,4 +70,10 @@
     select user_id
     from leave_user
     where username = #para(username)
+#end
+
+#sql("use")
+    select username
+    from leave_user
+    where user_id = #para(user_id)
 #end

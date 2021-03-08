@@ -9,7 +9,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
-import com.jfinal.core.NotAction;
 import com.jfinal.core.Path;
 import com.jfinal.json.FastJson;
 import com.jfinal.kit.Kv;
@@ -17,6 +16,8 @@ import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.render.JsonRender;
+
+import cn.hutool.crypto.SecureUtil;
 
 /**
  * 
@@ -43,7 +44,9 @@ public class OperationController extends Controller {
         for (int i = 0; i < list.size(); i++) {
             String user_id;
             String username = list.get(i).getStr("username");
+            String name = list.get(i).getStr("name");
             String password = list.get(i).getStr("password");
+            String securePassword = SecureUtil.md5(password);
             String user_name = list.get(i).getStr("user_name");
             String post = list.get(i).getStr("post");
             String state = list.get(i).getStr("_state");
@@ -51,8 +54,9 @@ public class OperationController extends Controller {
             if (state.equals("added")) {
                 if (checkPost(post) && checkUsername(username)) {
                     user_id = list.get(i).getStr("_id");
-                    Record user = new Record().set("user_id", user_id).set("user_name", user_name)
-                        .set("username", username).set("password", password)
+                    securePassword = SecureUtil.md5(password);
+                    Record user = new Record().set("user_id", user_id).set("user_name", user_name).set("name", name)
+                        .set("securePassword", securePassword).set("username", username).set("password", password)
                         .set("dept", dept).set("post", post);
                     Db.save("leave_user", "user_id", user);
                     Record role = new Record().set("id", user_id).set("role_id", post).set("user_id", user_id);
@@ -63,12 +67,13 @@ public class OperationController extends Controller {
                 }
             }
             // 修改记录
-            if (state.equals("modified")) {
+            if (state.equals("modified") ) {
                 user_id = list.get(i).getStr("user_id");
-                if (checkUser(user_id) && checkPost(post) && checkUsername(username)) {
+                if (checkUser(user_id) && checkPost(post) && isUse(user_id, username)) {
                     user_id = list.get(i).getStr("user_id");
-                    Kv cond = Kv.by("user_id", user_id).set("user_name", user_name)
-                        .set("username", username).set("password", password).set("post", post);
+                    securePassword = SecureUtil.md5(password);
+                    Kv cond = Kv.by("user_id", user_id).set("name", name).set("user_name", user_name)
+                        .set("username", username).set("password", password).set("securePassword", securePassword).set("post", post);
                     Db.template("leave.update1", cond).update();
                     renderJson(Ret.ok());
                 } else {
@@ -96,10 +101,8 @@ public class OperationController extends Controller {
      * @param user_id 表示更改记录的user_id
      * @return 更改记录的账号的 user_id 与cookie中的账号的 user_id 相等时返回 true，否则返回 false
      */
-    @NotAction
-    public boolean checkUser(String user_id) {
-        System.out.println(1);
-        String userid = getCookie("user_id");
+    private boolean checkUser(String user_id) {
+        String userid = getSessionAttr("user_id");
         if (user_id.equals(userid))
             return true;
         return false;
@@ -111,9 +114,7 @@ public class OperationController extends Controller {
      * @param post 表示记录中的职位
      * @return 能更改为现有职位返回 true，否则返回 false
      */
-    @NotAction
-    public boolean checkPost(String post) {
-        System.out.println(2);
+    private boolean checkPost(String post) {
         List<Record> record = Db.template("leave.role").find();
         for (int i = 0; i < record.size(); i++) {
             String role = record.get(i).getStr("role_id");
@@ -126,13 +127,11 @@ public class OperationController extends Controller {
     
     /**
      * 
-     * 判断是否为同一用户
+     * 判断是否有相同账号
      * @param username 表示登陆的账号
-     * @return 如果是同一账号则返回 true，否则返回 false
+     * @return 如果是同一账号名则返回 false，否则返回 true
      */
-    @NotAction
-    public boolean checkUsername(String username) {
-        System.out.println(3);
+    private boolean checkUsername(String username) {
         List<Record> record = Db.template("leave.username").find();
         for (int i = 0; i < record.size(); i++) {
             String list = record.get(i).getStr("username");
@@ -142,4 +141,21 @@ public class OperationController extends Controller {
         }
         return true;
     }
+    
+    /**
+     * 
+     * 检查是否更改账号
+     * @param username 账号
+     * @return 没有更改账号返回 true，否则返回 false
+     */
+    private boolean isUse(String user_id, String username) {
+        Kv cond = Kv.by("user_id", user_id);
+        Record record = Db.template("leave.use", cond).findFirst();
+            String list = record.getStr("username");
+            if (username.equals(list)) {
+                return true;
+            }
+        return false;
+    }
+
 }

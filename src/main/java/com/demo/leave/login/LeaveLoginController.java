@@ -10,6 +10,8 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.render.JsonRender;
 
+import cn.hutool.crypto.SecureUtil;
+
 /**
  * 
  * 用户登录验证
@@ -24,9 +26,10 @@ public class LeaveLoginController extends Controller {
         String password = getPara("password");
         Kv cond = Kv.by("username", username);
         Record a = Db.template("leave.login", cond).findFirst();
-        String pwd = a.getStr("password");
+        String spwd = a.getStr("securePassword");
+        String securePassword = SecureUtil.md5(password);
         // 验证密码是否正确
-        if (password.equals(pwd)) {
+        if (securePassword.equals(spwd)) {
             String user_id = a.getStr("user_id");
             Kv cond1 = Kv.by("user_id", user_id);
             // 获取用户权限

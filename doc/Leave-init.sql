@@ -10,16 +10,18 @@ CREATE TABLE leave_user
     user_id varchar(10) PRIMARY KEY,
     user_name varchar(10) NOT NULL,
     username varchar(20) NOT NULL,
+    name varchar(20) NOT NULL,
     password varchar(20) NOT NULL,
+    "securePassword" varchar(130) NOT NULL,
     dept varchar(20) NOT NULL,
     post varchar(20) NOT NULL
 );
 
-INSERT INTO leave_user (user_id, user_name, username, password, dept, post)
+INSERT INTO leave_user (user_id, user_name, username, name, password, "securePassword", dept, post)
 VALUES
-('1', '领导1', '1', '1', '1', '1'),
-('2', '考勤员1', '2', '2', '2', '2'),
-('3', '职员1', '3', '3', '3', '3');
+('1', '领导1', '1', '1', '1', 'c4ca4238a0b923820dcc509a6f75849b', '1', '1'),
+('2', '考勤员1', '2', '2', '2', 'c81e728d9d4c2f636f067f89cc14862c', '2', '2'),
+('3', '职员1', '3', '3', '3', 'eccbc87e4b5ce2fe28308fd9f2a7baf3', '3', '3');
 
 
 CREATE TABLE leave_role

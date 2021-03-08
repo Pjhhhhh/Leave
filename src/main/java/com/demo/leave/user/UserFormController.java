@@ -33,12 +33,14 @@ public class UserFormController extends Controller {
             for (int i = 0; i < userList.size(); i++) {
                 String user_id = userList.get(i).getStr("user_id");
                 String username = userList.get(i).getStr("username");
+                String name = userList.get(i).getStr("name");
                 String password = userList.get(i).getStr("password");
+                String securePassword = userList.get(i).getStr("securePassword");
                 String user_name = userList.get(i).getStr("user_name");
                 String dept = userList.get(i).getStr("dept");
                 String post = userList.get(i).getStr("post");
-                Kv data = Kv.by("user_id", user_id).set("username", username).set("password", password)
-                    .set("user_name", user_name).set("dept", dept).set("post", post);
+                Kv data = Kv.by("user_id", user_id).set("username", username).set("name", name).set("password", password)
+                    .set("securePassword", securePassword).set("user_name", user_name).set("dept", dept).set("post", post);
                 list.add(data);
             }
             renderJson(Ret.ok("data", list));
