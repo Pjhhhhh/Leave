@@ -9,7 +9,7 @@ import com.jfinal.core.Path;
  * @author Pjh
  * @date 2021年2月18日
  */
-@Path("/login")
+@Path("/")
 public class LoginController extends Controller {
     
     public void index() {

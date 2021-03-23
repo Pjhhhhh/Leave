@@ -1,0 +1,79 @@
+#sql("login")
+    select * from leave_user
+    where 1 = 1
+    #if(username)
+        and username = #para(username)
+    #end
+#end
+
+#sql("perid")
+    select per_id
+    from leave_role_user_relation, leave_permission_role_relation
+    where leave_role_user_relation.role_id = leave_permission_role_relation.role_id and user_id = #para(user_id)
+#end
+
+#sql("update")
+    update leave_form
+    set state = #para(state), opinion = #para(opinion)
+    where uuid = #para(uuid)
+#end
+
+#sql("find")
+    select *
+    from leave_form
+    where name = #para(name)
+#end
+
+#sql("form")
+    select *
+    from leave_form
+    where 1 = 1
+    #if(findName)
+        and name like concat('%', #para(findName), '%')
+    #end
+#end
+
+#sql("user")
+    select *
+    from leave_user
+    where dept = #para(findDept)
+#end
+
+#sql("add")
+    insert into leave_user
+    values(#para(user_id), #para(user_name), #para(username), #para(password), #para(dept), #para(post))
+#end
+
+#sql("delete")
+    delete
+    from leave_user
+    where user_id = #para(user_id)
+#end
+
+#sql("update1")
+    update leave_user
+    set user_name = #para(user_name), username = #para(username), name = #para(name), password = #para(password), "securePassword" = #para(securePassword), post = #para(post)
+    where user_id = #para(user_id)
+#end
+
+#sql("role")
+    select role_id
+    from leave_role
+#end
+
+#sql("username")
+    select username
+    from leave_user
+#end
+
+#sql("userid")
+    select user_id
+    from leave_user
+    where username = #para(username)
+#end
+
+#sql("use")
+    select username
+    from leave_user
+    where user_id = #para(user_id)
+#end

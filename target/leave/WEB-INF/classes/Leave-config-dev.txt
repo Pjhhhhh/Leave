@@ -1,0 +1,6 @@
+
+#主要配置
+
+jdbcUrl=jdbc:postgresql://172.16.6.85/leave
+user=postgres
+password=pjh

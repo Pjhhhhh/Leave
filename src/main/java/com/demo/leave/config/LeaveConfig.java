@@ -29,7 +29,7 @@ public class LeaveConfig extends JFinalConfig {
      */
     static void loadConfig() {
         if (p == null) {
-            p = PropKit.useFirstFound("leave-config-dev.txt");
+            p = PropKit.useFirstFound("Leave-config-dev.txt");
         }
     }
 

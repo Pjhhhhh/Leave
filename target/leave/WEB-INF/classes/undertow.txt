@@ -1,0 +1,9 @@
+﻿# 配置 undertow
+
+undertow.devMode=true
+undertow.host=0.0.0.0
+undertow.port=8088
+
+undertow.hotSwapClassPrefix=live.autu.plugin.jfinal.swagger
+
+undertow.resourcePath = src/main/webapp, classpath:static
